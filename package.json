@@ -9,10 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ahirechoti/upgrad-E-commerce.git"
+    "url": "https://github.com/ahirechoti/upGrad-Eshop.git"
   },
   "author": "Abhishek H V",
-  "license": "MIT",
+  "license": "",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",

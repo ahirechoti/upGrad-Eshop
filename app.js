@@ -30,7 +30,7 @@ if(process.env.MONGODBLINK){
 }
 
 app.get('/', (req, res)=>{
-    res.status(200).json({welcome:"Hello world!"});
+    res.status(httpStatus.StatusCodes.OK).json({welcome:"Hello world!"});
 })
 
 
