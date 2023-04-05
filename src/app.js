@@ -14,27 +14,36 @@ app.use(cors());
 app.use(express.json());
 
 //mongoose db connection.
-if(process.env.MONGODBLINK){
-    mongoose.connect(process.env.MONGODBLINK);
+if (process.env.MONGODBLINK) {
+    mongoose.connect(process.env.MONGODBLINK, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        dbName: 'UPGRAD',
+    });
     const db = mongoose.connection;
-    db.once('open', ()=>{
+    db.once('open', () => {
         console.log('DB connected');
     })
-    db.on('error', (e)=>{
+    db.on('error', (e) => {
         console.error('Error while connecting to database', e);
         process.exit();
     })
-}else{
+} else {
     console.error("DB link error");
     process.exit();
 }
 
-app.get('/', (req, res)=>{
-    res.status(httpStatus.StatusCodes.OK).json({welcome:"Hello world!"});
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/views/index.html');
+})
+app.get('/signUp', (req, res) => {
+    res.sendFile(__dirname + '/views/signUp.html');
+})
+app.get('/*', (req, res) => {
+    res.sendFile(__dirname + '/views/404.html')
 })
 
-
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
     console.log(`Application listening at http://localhost:${PORT}/`);
 })
 

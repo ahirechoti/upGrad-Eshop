@@ -9,21 +9,7 @@ var validateEmail = function (email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return re.test(email)
 };
-/**
- * hash password before insert
- */
-userSchema.pre('save', (next) => {
-    let user = this;
-    if (!user.isModified('password')) return next();
-    try {
-        const saltOrRounds = 10;
-        user.password = bcrypt.hashSync(this.password, saltOrRounds);
-        next();
-    } catch (ex) {
-        return next(ex);
-    }
 
-})
 /**
  * Compare password to verify if it is valid.
  */
@@ -66,4 +52,19 @@ const userSchema = Schema({
     {
         collection: "ECOMMERCE"
     });
+/**
+* hash password before insert
+*/
+userSchema.pre('save', (next) => {
+    let user = this;
+    //if (!user.isModified('password')) return next();
+    try {
+        const saltOrRounds = 10;
+        user.password = bcrypt.hashSync(this.password, saltOrRounds);
+        next();
+    } catch (ex) {
+        return next(ex);
+    }
+
+})
 export default model("eshop-user", userSchema);
