@@ -1,4 +1,4 @@
-import mongoose, {Schema, model} from 'mongoose';
+const { Schema, model } = require('mongoose');
 
 const shippingSchema = Schema({
     id: { type: Number, unique: true, min : 1, required: true},
@@ -14,8 +14,5 @@ const shippingSchema = Schema({
     created_by:{type:String, immutable:true},
     modified_date:{type:Date},
     modified_by:{type:String}
-},
-{
-    collection: "ECOMMERCE"
 });
-export default model("eshop-shipping-address", shippingSchema);
+module.exports =  model("eshop-shipping-address", shippingSchema, "ADDRESSES");

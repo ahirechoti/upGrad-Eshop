@@ -14,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 //mongoose db connection.
+//console.log(process.env);
 if (process.env.MONGODBLINK) {
     mongoose.connect(process.env.MONGODBLINK, {
         useNewUrlParser: true,
@@ -32,6 +33,13 @@ if (process.env.MONGODBLINK) {
     console.error("DB link error");
     process.exit();
 }
+/**
+ * define and call all the API(s)
+ */
+const { signInAPI, signUpAPI } = require('./routes/auth.route');
+signUpAPI(app);
+signInAPI(app);
+
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/views/index.html');
@@ -44,7 +52,7 @@ app.get('/*', (req, res) => {
 })
 
 app.listen(PORT, () => {
-    console.log(`Application listening at http://localhost:${PORT}/`);
+    console.log(`Upgrad-eShop running at http://localhost:${PORT}/`);
 })
 
 //module.exports = app;

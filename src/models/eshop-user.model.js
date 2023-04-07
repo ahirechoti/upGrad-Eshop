@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import { bcrypt } from 'bcrypt';
+const { Schema, model } = require('mongoose');
+const bcrypt = require('bcrypt')
 /**
  * 
  * @param {String} email 
@@ -11,24 +11,10 @@ var validateEmail = function (email) {
 };
 
 /**
- * Compare password to verify if it is valid.
- */
-userSchema.methods.comparePassword = (password, cb) => {
-    try {
-        const isMatch = bcrypt.compareSync(password, this.password);
-        //callback with validate validateHeaderValue;
-        cb(isMatch);
-    } catch (ex) {
-        return cb(ex);
-    }
-
-
-}
-/**
  * User schema 
  */
 const userSchema = Schema({
-    id: { type: Number, unique: true, min: 1, required: true },
+    id: { type: Number, unique: true, required: true },
     user_name: { type: String, required: true },
     email: {
         type: String,
@@ -45,13 +31,25 @@ const userSchema = Schema({
     phone_number: { type: String, match: /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/ },
     role: { type: String, required: true },
     created_date: { type: Date, immutable: true, default: () => { return Date.now() } },
-    created_by: { type: String, immutable: true },
+    created_by: { type: String, immutable: true, default: 'SYSTEM' },
     modified_date: { type: Date },
     modified_by: { type: String }
-},
-    {
-        collection: "ECOMMERCE"
-    });
+});
+
+/**
+ * Compare password to verify if it is valid.
+ */
+userSchema.methods.comparePassword = (password, cb) => {
+    try {
+        const isMatch = bcrypt.compareSync(password, this.password);
+        //callback with validate validateHeaderValue;
+        cb(isMatch);
+    } catch (ex) {
+        return cb(ex);
+    }
+
+
+}
 /**
 * hash password before insert
 */
@@ -67,4 +65,4 @@ userSchema.pre('save', (next) => {
     }
 
 })
-export default model("eshop-user", userSchema);
+module.exports = model("eshop-user", userSchema, "USERS");

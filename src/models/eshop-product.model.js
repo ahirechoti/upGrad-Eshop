@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose';
+const { Schema, model } = require('mongoose');
 
 const productSchema = Schema({
     product_id: { type: Number, unique: true, min : 1, required: true},
@@ -13,8 +13,5 @@ const productSchema = Schema({
     created_by:{type:String, immutable:true},
     modified_date:{type:Date},
     modified_by:{type:String}
-},
-{
-    collection: "ECOMMERCE"
 });
-export default model("eshop-product", productSchema);
+module.exports =  model("eshop-product", productSchema, "PRODUCTS");
