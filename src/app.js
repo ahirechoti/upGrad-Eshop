@@ -39,7 +39,8 @@ if (process.env.MONGODBLINK) {
 const { signInAPI, signUpAPI } = require('./routes/auth.route');
 signUpAPI(app);
 signInAPI(app);
-
+const { getAllUsers, updateUserdetails } = require('./routes/user.route');
+getAllUsers(app);
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/views/index.html');

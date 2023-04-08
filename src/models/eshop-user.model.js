@@ -25,7 +25,7 @@ const userSchema = Schema({
         validate: [validateEmail, 'Please fill a valid email address'],
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     },
-    firt_name: { type: String, reuired: true, minLength: 3 },
+    first_name: { type: String, reuired: true, minLength: 3 },
     last_name: { type: String, reuired: true, minLength: 1 },
     password: { type: String, required: true },
     phone_number: { type: String, match: /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/ },
@@ -37,32 +37,19 @@ const userSchema = Schema({
 });
 
 /**
- * Compare password to verify if it is valid.
- */
-userSchema.methods.comparePassword = (password, cb) => {
-    try {
-        const isMatch = bcrypt.compareSync(password, this.password);
-        //callback with validate validateHeaderValue;
-        cb(isMatch);
-    } catch (ex) {
-        return cb(ex);
-    }
-
-
-}
-/**
 * hash password before insert
 */
-userSchema.pre('save', (next) => {
+/*userSchema.pre('save', (next) => {
     let user = this;
     //if (!user.isModified('password')) return next();
     try {
+        console.log(user, this);
         const saltOrRounds = 10;
-        user.password = bcrypt.hashSync(this.password, saltOrRounds);
+        user.password = bcrypt.hashSync(user.password, saltOrRounds);
         next();
     } catch (ex) {
         return next(ex);
     }
 
-})
+})*/
 module.exports = model("eshop-user", userSchema, "USERS");
