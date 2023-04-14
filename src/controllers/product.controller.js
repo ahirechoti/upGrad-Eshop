@@ -1,8 +1,5 @@
 const productModel = require('../models/eshop-product.model');
 const httpStatus = require('http-status-codes').StatusCodes;
-const jwt = require('jsonwebtoken');
-const eshopUserModel = require('../models/eshop-user.model');
-const secret = process.env.SECERET || 'TEST';
 
 const fetchAllProducts = async (req, res) => {
     try {
@@ -49,8 +46,45 @@ const addProduct = async (req, res) => {
     }
 }
 
+const getProductCategories = async (req, res) => {
+    try {
+        const cats = await productModel.find().select('category -_id');
+        let result = [];
+        if(cats){
+            cats.forEach(c => {
+                result.push(c.category);
+            })
+        }
+        return res.status(httpStatus.OK).json(result);
+    } catch (error) {
+        console.error('Internal server error', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json('Internal server error');
+    }
+}
+
+const getProductbyID = async (req, res) => {
+    try {
+        if(!req.params.id){
+            return res.status(httpStatus.BAD_REQUEST).json('Bad request');
+        }
+        const queryParam = {
+            '_id': req.params.id
+        }
+        const product = await productModel.findOne(queryParam);
+        if(!product){
+            return res.status(httpStatus.OK).json(`No Product found for ID - ${req.params.id}!`)
+        }
+        return res.status(httpStatus.OK).json(product);
+    } catch (error) {
+        console.error('Internal server error', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json('Internal server error');
+    }
+}
+
 const productController = {
     fetchAllProducts,
-    addProduct
+    addProduct,
+    getProductCategories,
+    getProductbyID
 }
 module.exports = productController;

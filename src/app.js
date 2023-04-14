@@ -40,6 +40,9 @@ addressRoute.addAddress(app);
 
 const productRoute = require('./routes/product.route');
 productRoute.saveProduct(app);
+productRoute.getAllProducts(app);
+productRoute.getProductCategories(app);
+productRoute.getProductbyID(app);
 
 const { getAllUsers, updateUserdetails } = require('./routes/user.route');
 getAllUsers(app);
