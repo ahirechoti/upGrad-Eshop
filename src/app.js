@@ -38,6 +38,9 @@ authRoute.signInAPI(app);
 const addressRoute = require('./routes/address.route');
 addressRoute.addAddress(app);
 
+const productRoute = require('./routes/product.route');
+productRoute.saveProduct(app);
+
 const { getAllUsers, updateUserdetails } = require('./routes/user.route');
 getAllUsers(app);
 

@@ -1,22 +1,25 @@
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/eshop-user.model');
 const eshopUserModel = require('../models/eshop-user.model');
+const httpStatus = require('http-status-codes').StatusCodes;
 
 const verifyToken = (req, res, next) => {
     try {
-        const token = req.headers['x-access-token'];
+        const token = req.headers['x-auth-token'];
         if(!token){
-            return res.status(401).send({
+            return res.status(httpStatus.NOT_ACCEPTABLE).send({
                 message: "Token required."
             })
         }
-        jwt.verify(token, process.env.SECRET, (err, data)=>{
+        jwt.verify(token, (process.env.SECRET || 'TEST'), async (err, data)=>{
             if(err){
-                return res.status(401).send({
-                    message: 'Unauthorized'
-                });
+                return res.status(httpStatus.UNAUTHORIZED).send('Please login first to access this endpoint!');
             }
-            req.currentUser = data.user;
+            if(!req.currentUser){
+                const user = await eshopUserModel.findOne({'_id': data._id});
+                req.currentUser = user;
+            }
+            //req.currentUser = data.user;
             next();
         });
     } catch (error) {
@@ -27,10 +30,10 @@ const verifyToken = (req, res, next) => {
 
 const verifyAdminAuth = (req, res, next) => {
     try {
-        if(req.currentUser.role == 'ADMIN'){
+        if(req.currentUser.role.toLowerCase() == 'admin'){
             next();
         }else{
-            res.status(403).send('You are not admin.')
+            res.status(403).send('You are not authorised to access this endpoint!')
         }
     } catch (error) {
         console.error(error);
@@ -54,4 +57,5 @@ try {
     next(error);
 }
 }
-module.exports =  {verifyToken, verifyAdminAuth, checkIsSameUserorAdmin}
+const authentication =  {verifyToken, verifyAdminAuth, checkIsSameUserorAdmin};
+module.exports = authentication;
