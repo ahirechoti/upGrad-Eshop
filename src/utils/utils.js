@@ -7,25 +7,19 @@ const userObject = (users) => {
         if(Array.isArray(users)){
             users.forEach(user => {
                 result.push({
-                    id: user.id,
                     _id: user._id,
-                    user_name: user.user_name,
-                    full_name: (user.first_name+' '+user.last_name),
-                    phone_number: user.phone_number,
-                    role:user.role,
-                    created_date: user.created_date
+                    email: user.email,
+                    first_name: user.first_name,
+                    last_name: user.last_name
                 })
             })
         }else{
             var user = users;
             result.push({
-                id: user.id,
                 _id: user._id,
-                user_name: user.user_name,
-                full_name: (user.first_name+' '+user.last_name),
-                phone_number: user.phone_number,
-                role:user.role,
-                created_date: user.created_date
+                email: user.email,
+                first_name: user.first_name,
+                last_name: user.last_name
             })
         }
         return result;

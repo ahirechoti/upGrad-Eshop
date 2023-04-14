@@ -1,11 +1,12 @@
-const { signUp, signIn } = require('../controllers/auth.controller');
+const authController = require('../controllers/auth.controller');
 
 const signUpAPI = (app) => {
-    app.post('/eshop/api/v1/signUp', signUp);
+    app.post('/users', authController.signUp);
 }
 
 const signInAPI = (app) => {
-    app.post('/eshop/api/v1/signIn', signIn);
+    app.post('/auth', authController.signIn);
 }
 
-module.exports =  { signInAPI, signUpAPI };
+const authRoute =  { signInAPI, signUpAPI };
+module.exports = authRoute;

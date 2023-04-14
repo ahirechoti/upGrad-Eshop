@@ -15,30 +15,29 @@ app.use(express.json());
 
 //mongoose db connection.
 //console.log(process.env);
-if (process.env.MONGODBLINK) {
-    mongoose.connect(process.env.MONGODBLINK, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        dbName: 'UPGRAD',
-    });
-    const db = mongoose.connection;
-    db.once('open', () => {
-        console.log('DB connected');
-    })
-    db.on('error', (e) => {
-        console.error('Error while connecting to database', e);
-        process.exit();
-    })
-} else {
-    console.error("DB link error");
+mongoose.connect((process.env.MONGODBLINK || 'mongodb://127.0.0.1:27017'), {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    dbName: 'UPGRAD-ESHOP',
+});
+const db = mongoose.connection;
+db.once('open', () => {
+    console.log('DB connected');
+})
+db.on('error', (e) => {
+    console.error('Error while connecting to database', e);
     process.exit();
-}
+})
 /**
  * define and call all the API(s)
  */
-const { signInAPI, signUpAPI } = require('./routes/auth.route');
-signUpAPI(app);
-signInAPI(app);
+const authRoute = require('./routes/auth.route');
+authRoute.signUpAPI(app);
+authRoute.signInAPI(app);
+
+const addressRoute = require('./routes/address.route');
+addressRoute.addAddress(app);
+
 const { getAllUsers, updateUserdetails } = require('./routes/user.route');
 getAllUsers(app);
 

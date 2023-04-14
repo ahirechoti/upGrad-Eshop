@@ -1,18 +1,17 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
-const shippingSchema = Schema({
-    id: { type: Number, unique: true, min : 1, required: true},
+const shippingSchema = mongoose.Schema({
     city:{type:String, required:true},
     landmark:{type:String},
     name:{type:String, required:true},
-    phone:{type:String, match: /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/},
+    contactNumber:{type:String, match: [/^[0-9]{10}$/, 'Invalid contact number!']},
     state:{type:String, required:true},
     street:{type:String, required:true},
-    zipcode:{type:String, match: /^[1-9][0-9]{5}$/},
+    zipcode:{type:String, match: [/^[0-9]{6}$/, 'Invalid zip code!']},
     user_id:[{type:mongoose.Types.ObjectId, ref:'eshop-user'}],
     created_date:{type:Date, immutable:true,default: ()=>{ return Date.now() }},
     created_by:{type:String, immutable:true},
     modified_date:{type:Date},
     modified_by:{type:String}
 });
-module.exports =  model("eshop-shipping-address", shippingSchema, "ADDRESSES");
+module.exports =  mongoose.model("eshop-shipping-address", shippingSchema, "ADDRESSES");
