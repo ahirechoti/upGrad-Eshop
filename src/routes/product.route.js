@@ -16,11 +16,15 @@ const getProductbyID = (app) => {
 const updateProduct = (app) => {
     app.put('/products/:id',[authentication.verifyToken, authentication.verifyAdminAuth], productController.updateProduct);
 }
+const deleteProduct = (app) => {
+    app.delete('/products/:id',[authentication.verifyToken, authentication.verifyAdminAuth], productController.deleteProduct);
+}
 const productRoute = {
     saveProduct,
     getAllProducts,
     getProductCategories,
     getProductbyID,
-    updateProduct
+    updateProduct,
+    deleteProduct
 }
 module.exports = productRoute;

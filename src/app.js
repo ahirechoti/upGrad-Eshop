@@ -48,9 +48,8 @@ productRoute.getProductbyID(app);
 //update products.
 productRoute.updateProduct(app);
 //delete product
+productRoute.deleteProduct(app);
 
-const { getAllUsers, updateUserdetails } = require('./routes/user.route');
-getAllUsers(app);
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/views/index.html');

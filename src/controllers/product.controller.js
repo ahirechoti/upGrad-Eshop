@@ -105,11 +105,28 @@ const updateProduct = async (req, res) => {
     }
 }
 
+const deleteProduct = async (req, res) => {
+    try {
+        if(!req.params.id){
+            return res.status(httpStatus.BAD_REQUEST).json('Bad request');
+        }
+        const product = await productModel.findOneAndDelete({'_id': req.params.id}) || null;
+        if(!product){
+            return res.status(httpStatus.NOT_FOUND).json(`No Product found for ID - ${req.params.id}!`)
+        }
+        return res.status(httpStatus.OK).json(`Product with ID - ${req.params.id} deleted successfully!`)
+    } catch (error) {
+        console.error('Internal server error', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json('Internal server error');
+    }
+}
+
 const productController = {
     fetchAllProducts,
     addProduct,
     getProductCategories,
     getProductbyID,
-    updateProduct
+    updateProduct,
+    deleteProduct
 }
 module.exports = productController;
