@@ -39,21 +39,17 @@ const verifyAdminAuth = (req, res, next) => {
     }
 }
 
-const checkIsSameUserorAdmin = async (req, res, next) => {
+const verifyUserAuth = async (req, res, next) => {
 try {
-    const id = req.body.id || req.query.id;
-    //console.log(req.currentUser)
-    if(req.currentUser.role == 'ADMIN'){
-        return next();
-    }else if(req.currentUser.id == id){
+    if(req.currentUser && req.currentUser.role.toLowerCase() == 'user'){
         next();
     }else{
-        res.status(403).send('You are not owner.')
+        res.status(httpStatus.UNAUTHORIZED).json('You are not authorised to access this endpoint!')
     }
 } catch (error) {
     console.error(error);
     next(error);
 }
 }
-const authentication =  {verifyToken, verifyAdminAuth, checkIsSameUserorAdmin};
+const authentication =  {verifyToken, verifyAdminAuth, verifyUserAuth};
 module.exports = authentication;

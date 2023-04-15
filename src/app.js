@@ -50,6 +50,9 @@ productRoute.updateProduct(app);
 //delete product
 productRoute.deleteProduct(app);
 
+const orderRoute = require('./routes/order.route');
+//create order.
+orderRoute.createOrder(app);
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/views/index.html');

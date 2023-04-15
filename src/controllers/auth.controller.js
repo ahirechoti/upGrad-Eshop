@@ -1,4 +1,4 @@
-const userModel = require('../models/eshop-user.model');
+
 const userObject = require('../utils/utils');
 const httpStatus = require('http-status-codes').StatusCodes;
 
@@ -18,13 +18,11 @@ const signUp = async (req, res) => {
         //validate.
         if (!userObj.email || !userObj.first_name || !userObj.last_name
             || !userObj.password || !userObj.contactNumber) {
-            return res.status(httpStatus.BAD_REQUEST).send({
-                message: 'Bad response'
-            })
+            return res.status(httpStatus.BAD_REQUEST).json('Bad request');
         }
         //hash User password.
         userObj.password = bcrypt.hashSync(userObj.password, 10);
-        const user = await userModel(userObj);
+        const user = await eshopUserModel(userObj);
         await user.save();
         res.status(httpStatus.OK).json(userObject(user)[0]);
 
@@ -42,24 +40,18 @@ const signUp = async (req, res) => {
 const signIn = async (req, res) => {
     try {
         if(!req.body.password){
-            return res.status(httpStatus.BAD_REQUEST).send({
-                message: "Please provide password."
-            })
+            return res.status(httpStatus.BAD_REQUEST).json("Password is required.")
         }
         const queryParam = {};
         if(req.body.email){
             queryParam['email'] = req.body.email
         }else{
-            return res.status(httpStatus.BAD_REQUEST).send({
-                message: "Please provide email/id"
-            })
+            return res.status(httpStatus.BAD_REQUEST).json("Email is required.")
         }
 
-        const user = await userModel.findOne(queryParam);
+        const user = await eshopUserModel.findOne(queryParam);
         if(!user){
-            return res.status(httpStatus.OK).json({
-                message: "This email has not been registered!"
-            })
+            return res.status(httpStatus.OK).json("This email has not been registered!")
         }
         if(bcrypt.compareSync(req.body.password, user.password)){
             //jwt token create and pass.
@@ -78,15 +70,11 @@ const signIn = async (req, res) => {
                 "isAuthenticated": (user.role.toLowerCase() == "admin")
             })
         }else{
-            res.status(httpStatus.OK).send({
-                message: "Invalid Credentials!"
-            })
+            res.status(httpStatus.OK).json("Invalid Credentials!")
         }
     } catch (error) {
         console.error(error);
-        res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
-            message: 'Internal server error'
-        })
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json('Internal server error')
     }
 }
 
