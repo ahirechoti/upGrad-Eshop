@@ -72,9 +72,33 @@ const getProductbyID = async (req, res) => {
         }
         const product = await productModel.findOne(queryParam);
         if(!product){
-            return res.status(httpStatus.OK).json(`No Product found for ID - ${req.params.id}!`)
+            return res.status(httpStatus.NOT_FOUND).json(`No Product found for ID - ${req.params.id}!`)
         }
         return res.status(httpStatus.OK).json(product);
+    } catch (error) {
+        console.error('Internal server error', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json('Internal server error');
+    }
+}
+
+const updateProduct = async (req, res) => {
+    try {
+        if(!req.params.id){
+            return res.status(httpStatus.BAD_REQUEST).json('Bad request');
+        }
+        const product = await productModel.findOne({'_id': req.params.id});
+        if(!product){
+            return res.status(httpStatus.NOT_FOUND).json(`No Product found for ID - ${req.params.id}!`)
+        }
+        product.name = req.body.name || product.name;
+        product.category = req.body.category || product.category;
+        product.price = req.body.price || product.price;
+        product.description = req.body.description || product.description;
+        product.manufacturer = req.body.manufacturer || product.manufacturer;
+        product.availableItems = req.body.availableItems || product.availableItems;
+        product.modified_date = Date.now();
+        await product.save();
+        res.status(httpStatus.OK).json(product);
     } catch (error) {
         console.error('Internal server error', error);
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json('Internal server error');
@@ -85,6 +109,7 @@ const productController = {
     fetchAllProducts,
     addProduct,
     getProductCategories,
-    getProductbyID
+    getProductbyID,
+    updateProduct
 }
 module.exports = productController;

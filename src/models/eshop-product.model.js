@@ -10,7 +10,7 @@ const productSchema = Schema({
     price:{type:Number, min:0},
     created_date:{type:Date, immutable:true,default: ()=>{ return Date.now() }},
     created_by:{type:String, immutable:true},
-    modified_date:{type:Date},
-    modified_by:{type:String}
+    modified_date:{type:Date, default: ()=> {return Date.now()}},
+    modified_by:{type:String, default: 'ADMIN'}
 });
 module.exports =  model("eshop-product", productSchema, "PRODUCTS");

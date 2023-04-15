@@ -13,10 +13,14 @@ const getProductCategories = (app) => {
 const getProductbyID = (app) => {
     app.get('/products/:id', productController.getProductbyID);
 }
+const updateProduct = (app) => {
+    app.put('/products/:id',[authentication.verifyToken, authentication.verifyAdminAuth], productController.updateProduct);
+}
 const productRoute = {
     saveProduct,
     getAllProducts,
     getProductCategories,
-    getProductbyID
+    getProductbyID,
+    updateProduct
 }
 module.exports = productRoute;

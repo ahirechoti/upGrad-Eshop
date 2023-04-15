@@ -39,10 +39,15 @@ const addressRoute = require('./routes/address.route');
 addressRoute.addAddress(app);
 
 const productRoute = require('./routes/product.route');
+//Add product
 productRoute.saveProduct(app);
+//get products
 productRoute.getAllProducts(app);
 productRoute.getProductCategories(app);
 productRoute.getProductbyID(app);
+//update products.
+productRoute.updateProduct(app);
+//delete product
 
 const { getAllUsers, updateUserdetails } = require('./routes/user.route');
 getAllUsers(app);
